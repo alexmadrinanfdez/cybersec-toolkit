@@ -19,10 +19,42 @@ def aes_decrypt(ciphertext: bytes, key: bytes) -> str:
     plaintext = aes.decrypt(nonce, ct, None)
     return plaintext.decode()
 
+def rsa_encrypt(message: str, public_key) -> bytes:
+    """Encrypts a string message using RSA."""
+    ciphertext = public_key.encrypt(
+        message.encode(),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return ciphertext
+
+def rsa_decrypt(ciphertext: bytes, private_key) -> str:
+    """Decrypts a ciphertext using RSA."""
+    plaintext = private_key.decrypt(
+        ciphertext,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return plaintext.decode()
+
 if __name__ == "__main__":
-    key = AESGCM.generate_key(bit_length=256)  # Generate a random 256-bit key
     message = "This is a secret message."
+    # AES Example
+    key = AESGCM.generate_key(bit_length=256)  # Generate a random 256-bit key
     ciphertext = aes_encrypt(message, key)
-    print("Ciphertext:", ciphertext.hex())
+    print("AES Ciphertext:", ciphertext.hex())
     decrypted_message = aes_decrypt(ciphertext, key)
-    print("Decrypted message:", decrypted_message)
+    print("AES Decrypted message:", decrypted_message)
+    # RSA Example
+    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    public_key = private_key.public_key()
+    ciphertext = rsa_encrypt(message, public_key)
+    print("RSA Ciphertext:", ciphertext.hex())
+    decrypted_message = rsa_decrypt(ciphertext, private_key)
+    print("RSA Decrypted message:", decrypted_message)
