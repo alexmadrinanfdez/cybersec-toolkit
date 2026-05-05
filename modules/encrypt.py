@@ -2,6 +2,7 @@ import secrets
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import serialization
 
 def aes_encrypt(message: str, key: bytes) -> bytes:
     aes = AESGCM(key)
@@ -17,7 +18,7 @@ def aes_decrypt(ciphertext: bytes, key: bytes) -> str:
     plaintext = aes.decrypt(nonce, ct, None)
     return plaintext.decode()
 
-def rsa_encrypt(message: str, public_key) -> bytes:
+def rsa_encrypt(message: str, public_key: rsa.RSAPublicKey) -> bytes:
     ciphertext = public_key.encrypt(
         message.encode(),
         padding.OAEP(
@@ -28,7 +29,7 @@ def rsa_encrypt(message: str, public_key) -> bytes:
     )
     return ciphertext
 
-def rsa_decrypt(ciphertext: bytes, private_key) -> str:
+def rsa_decrypt(ciphertext: bytes, private_key: rsa.RSAPrivateKey) -> str:
     plaintext = private_key.decrypt(
         ciphertext,
         padding.OAEP(
@@ -44,6 +45,16 @@ def generate_key(type: str) -> bytes:
         return AESGCM.generate_key(bit_length=256)
     elif type == "RSA":
         return rsa.generate_private_key(public_exponent=65537, key_size=2048)
+
+def serialize_private_key(key: rsa.RSAPrivateKey) -> bytes:
+    return key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+
+def load_private_key(pem: bytes) -> rsa.RSAPrivateKey:
+    return serialization.load_pem_private_key(pem, password=None)
 
 if __name__ == "__main__":
     message = "This is a secret message."
