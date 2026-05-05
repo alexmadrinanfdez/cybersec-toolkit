@@ -39,16 +39,22 @@ def rsa_decrypt(ciphertext: bytes, private_key) -> str:
     )
     return plaintext.decode()
 
+def generate_key(type: str) -> bytes:
+    if type == "AES":
+        return AESGCM.generate_key(bit_length=256)
+    elif type == "RSA":
+        return rsa.generate_private_key(public_exponent=65537, key_size=2048)
+
 if __name__ == "__main__":
     message = "This is a secret message."
     # AES (symmetric) example
-    key = AESGCM.generate_key(bit_length=256)  # Generate a random 256-bit key
+    key = generate_key("AES")
     ciphertext = aes_encrypt(message, key)
     print("AES Ciphertext:", ciphertext.hex())
     decrypted_message = aes_decrypt(ciphertext, key)
     print("AES Decrypted message:", decrypted_message)
     # RSA (asymmetric) example
-    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    private_key = generate_key("RSA")
     public_key = private_key.public_key()
     ciphertext = rsa_encrypt(message, public_key)
     print("RSA Ciphertext:", ciphertext.hex())
