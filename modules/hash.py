@@ -2,11 +2,9 @@ import hashlib
 
 def hash_file(file_path: str) -> str:
     h = hashlib.sha256()
-    with open(file_path, "rb") as file:
-         chunk = file.read(1024)
-         while chunk != b'':
-              h.update(chunk)
-              chunk = file.read(1024)
+    with open(file_path, "rb") as f:
+        while chunk := f.read(1024):
+            h.update(chunk)
     return h.hexdigest()
 
 def verify_integrity(orig_file: str, dest_file: str) -> bool:
