@@ -40,10 +40,10 @@ def rsa_decrypt(ciphertext: bytes, private_key: rsa.RSAPrivateKey) -> str:
     )
     return plaintext.decode()
 
-def generate_key(type: str) -> bytes:
-    if type == "AES":
+def generate_key(algorithm: str) -> bytes | rsa.RSAPrivateKey:
+    if algorithm == "AES":
         return AESGCM.generate_key(bit_length=256)
-    elif type == "RSA":
+    elif algorithm == "RSA":
         return rsa.generate_private_key(public_exponent=65537, key_size=2048)
 
 def serialize_private_key(key: rsa.RSAPrivateKey) -> bytes:
