@@ -1,4 +1,4 @@
-# Cybersecurity Toolkit
+# Cybersecurity Tools
 
 A lightweight Python toolkit for basic cybersecurity utilities, inspired by [this tutorial](https://youtu.be/kb_scuDUHls?si=fRaTzwHG8lP0AL0C).
 
@@ -6,8 +6,9 @@ A lightweight Python toolkit for basic cybersecurity utilities, inspired by [thi
 
 - Compute SHA-256 file hashes
 - Verify file integrity by comparing hashes
-- Encrypt and decrypt messages using AES-GCM
+- Encrypt and decrypt messages with AES and RSA
 - Check password strength with zxcvbn
+- Hash and verify passwords with bcrypt
 
 ## Setup
 
@@ -15,7 +16,7 @@ A lightweight Python toolkit for basic cybersecurity utilities, inspired by [thi
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate # on Windows: .venv\Scripts\activate
+source .venv/bin/activate
 ```
 
 2. Install dependencies:
@@ -24,12 +25,12 @@ source .venv/bin/activate # on Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Usage
+### Examples
 
-Run the main script:
+Run the provided modules directly **from the root** project **folder**:
 
 ```bash
-python main.py
+python -m src.hash
+python -m src.encrypt
+python -m src.password
 ```
-
-Follow the interactive menu to select a task.
