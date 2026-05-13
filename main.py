@@ -1,6 +1,6 @@
-import modules.hash as hash_module
-import modules.encrypt as encrypt_module
-import modules.password as pw_module
+from src import hash as hash_module
+from src import encrypt as encrypt_module
+from src import password as pw_module
 
 from getpass import getpass
 
